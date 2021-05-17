@@ -2,7 +2,7 @@
 
 ## Overview
 
-Backend repository for My Movie Memoir app containing code related to the application server and the SQL database.
+Backend repository for My Movie Memoir app containing code related to the RESTful application server and the SQL database.
 
 For the app, please see [MyMovieMemoir](https://github.com/Adryipan/MyMovieMemoir).
 
@@ -21,6 +21,10 @@ The schema can be found in [jdb_schema.sql](jdb_schema.sql)
 The current schema is as follow:
 <br>
 <img src="db_schema.png"></img>
+
+## List of API Endpoints
+
+Please see [API-ENDPOINT](API-ENDPOINT.md) for the list of available API endpoints.
 
 ## Setup
 
