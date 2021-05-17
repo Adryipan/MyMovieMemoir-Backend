@@ -28,10 +28,22 @@ Please see [API-ENDPOINT](API-ENDPOINT.md) for the list of available API endpoin
 
 ## Setup
 
-### Prerequisites
-
 Please make sure you have installed the following prerequisites on your development machine:
 
 * [GlassFish](https://javaee.github.io/glassfish/download) - GlassFish 4.1 is recommended for demonstration.
 * [NetBeans](https://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-3413139-esa.html) - This should include Java 8 within the installation bundle.
 * [Java 8](https://www.java.com/en/download/)
+
+## Start server
+
+The current distribution uses Java DB in NetBeans and is hosted with GlassFish 4.1. A set of sample data has been included in the schema file. For quick demonstration:
+
+1. Download the project
+2. Open the project folder with NetBean
+3. Run the server with the run project button
+
+By default, type the following URL with the combination of parameters listed [here](#ListOfAPIEndpoints)
+
+```
+http://localhost:15321/MyMovieMemoir-Backend/webresources/
+```
