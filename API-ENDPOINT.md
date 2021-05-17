@@ -6,10 +6,10 @@ These endpoints allow you to access My Movie Memoir services.
 
 My Movie Memoir supports the following list of resource.
 
-* [person](#/moviememoirws.person/**)
-* [cinema](#/moviememoirws.cinema/)
-* [credentials](#/moviememoirws.credentials/)
-* [memoir](#/moviememoirws.memoir/)
+* [person](#moviememoirwsperson)
+* [cinema](#moviememoirwscinema)
+* [credentials](#moviememoirwscredentials)
+* [memoir](#moviememoirwsmemoir)
 
 These can be used alone as follow:
 
