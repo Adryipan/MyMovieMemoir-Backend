@@ -6,10 +6,10 @@ These endpoints allow you to access My Movie Memoir services.
 
 My Movie Memoir supports the following list of resource.
 
-* [person](#moviememoirwsperson)
-* [cinema](#moviememoirwscinema)
-* [credentials](#moviememoirwscredentials)
-* [memoir](#moviememoirwsmemoir)
+* [person](#moviememoirwsperson) - Holds all user metadata excluding credentials
+* [cinema](#moviememoirwscinema) - Holds all cinema metadata including cinema name and suburb
+* [credentials](#moviememoirwscredentials) - Holds all user credential metadata
+* [memoir](#moviememoirwsmemoir) - Holds all memoir metadata
 
 These can be used alone as follow:
 
@@ -67,9 +67,9 @@ Each resource has its list of suppoeted components.
 
 | Components                                    | Description                                                                   |
 | :---------------------------------------------- | ------------------------------------------------------------------------------- |
+| `/findByAuthentication/{username}/{password}` | Returns a list of credential metadata for the specified username and password |
 | `/findByUsername/{username}`                  | Returns a list of credential metadata for the specified username              |
 | `/findByPassword/{password}`                  | Returns a list of credential metadata for the specified password              |
-| `/findByAuthentication/{username}/{password}` | Returns a list of credential metadata for the specified username and password |
 | `/findBySignUpdate/{signUpDate}`              | Returns a list of credential metadata for the specified signup date           |
 
 ## **/moviememoirws.memoir/**
@@ -77,17 +77,17 @@ Each resource has its list of suppoeted components.
 
 | Components                                             | Description                                                                                                    |
 | :------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `/findByWatchDate/{watchDate}`                         | Returns a list of memoir metadata for the specified watch date firsname                                        |
-| `/findByMovieNameAndCinema/{movieName}/{cinemaName}`   | Returns a list of memoir metadata for the specified movien name and cinema name surname                        |
-| `/topFiveMovieOfTheYear/{userId}`                      | Returns a list of memoir metadata for the specified user id                                                    |
-| `/findByIdDate/{userId}/{startDate}/{endDate}`         | Returns a list of memoir metadata for the specified user id, range of watch date - start date and end date     |
-| `/findRemakebyUserID/{userId}`                         | Returns a list of memoir metadata of remake version movies watched by the user with the specified user id name |
-| `/findByWatchTime/{watchTime}`                         | Returns a list of memoir metadata for the specified watch time                                                 |
-| `/findByReleaseDate/{releaseDate}`                     | Returns a list of memoir metadata for the specified movie release date                                         |
-| `/findByComment/{comment}`                             | Returns a list of memoir metadata for the specified comment                                                    |
 | `/countMoviePerMonth/{userId}/{year}`                  | Return the counted the number of watched movie per month for the user with the specified user id               |
-| `/findByMovieNameAndCinemaSuburb/{movieName}/{suburb}` | Returns a list of memoir metadata for the specified movie name and cinema suburb                               |
-| `/findHigestRatingbyUserid/{userId}`                   | Returns a list of memoir metadata with the highest rating for the user with the specified user id              |
-| `/findByUID/{userId}`                                  | Returns a list of memoir metadata for the specified user id                                                    |
+| `/findByComment/{comment}`                             | Returns a list of memoir metadata for the specified comment                                                    |
+| `/findByIdDate/{userId}/{startDate}/{endDate}`         | Returns a list of memoir metadata for the specified user id, range of watch date - start date and end date     |
 | `/findByMovieName/{movieName}`                         | Returns a list of memoir metadata for the specified movie name                                                 |
+| `/findByMovieNameAndCinema/{movieName}/{cinemaName}`   | Returns a list of memoir metadata for the specified movien name and cinema name surname                        |
+| `/findByMovieNameAndCinemaSuburb/{movieName}/{suburb}` | Returns a list of memoir metadata for the specified movie name and cinema suburb                               |
 | `/findByRating/{rating}`                               | Returns a list of memoir metadata for the specified rating                                                     |
+| `/findByReleaseDate/{releaseDate}`                     | Returns a list of memoir metadata for the specified movie release date                                         |
+| `/findByUID/{userId}`                                  | Returns a list of memoir metadata for the specified user id                                                    |
+| `/findByWatchDate/{watchDate}`                         | Returns a list of memoir metadata for the specified watch date firsname                                        |
+| `/findByWatchTime/{watchTime}`                         | Returns a list of memoir metadata for the specified watch time                                                 |
+| `/findHigestRatingbyUserid/{userId}`                   | Returns a list of memoir metadata with the highest rating for the user with the specified user id              |
+| `/findRemakebyUserID/{userId}`                         | Returns a list of memoir metadata of remake version movies watched by the user with the specified user id name |
+| `/topFiveMovieOfTheYear/{userId}`                      | Returns a list of memoir metadata for the specified user id                                                    |
