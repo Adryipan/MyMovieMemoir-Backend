@@ -7,12 +7,10 @@ Backend repository for My Movie Memoir app containing code related to the RESTfu
 For the app, please see [MyMovieMemoir](https://github.com/Adryipan/MyMovieMemoir).
 
 ## Technologies
-
 This project is created with:
-
-* Java 8
+* Java 8 
 * GlassFish 4.1
-* Java DB database in NetBeans
+* NetBeans
 
 ## Database schema
 
