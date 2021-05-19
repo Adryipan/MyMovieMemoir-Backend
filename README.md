@@ -9,8 +9,8 @@ For the app, please see [MyMovieMemoir](https://github.com/Adryipan/MyMovieMemoi
 ## Technologies
 This project is created with:
 * Java 8 
-* GlassFish 4.1
-* NetBeans
+* Spring boot
+* MySQL
 
 ## Database schema
 
@@ -26,22 +26,27 @@ Please see [API-ENDPOINT](API-ENDPOINT.md) for the list of available API endpoin
 
 ## Setup
 
-Please make sure you have installed the following prerequisites on your development machine:
+[comment]: <> (Please make sure you have installed the following prerequisites on your development machine:)
 
-* [GlassFish](https://javaee.github.io/glassfish/download) - GlassFish 4.1 is recommended for demonstration.
-* [NetBeans](https://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-3413139-esa.html) - This should include Java 8 within the installation bundle.
-* [Java 8](https://www.java.com/en/download/)
+[comment]: <> (* [GlassFish]&#40;https://javaee.github.io/glassfish/download&#41; - GlassFish 4.1 is recommended for demonstration.)
 
-## Start server
+[comment]: <> (* [NetBeans]&#40;https://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-3413139-esa.html&#41; - This should include Java 8 within the installation bundle.)
 
-The current distribution uses Java DB in NetBeans and is hosted with GlassFish 4.1. A set of sample data has been included in the schema file. For quick demonstration:
+[comment]: <> (* [Java 8]&#40;https://www.java.com/en/download/&#41;)
 
-1. Download the project
-2. Open the project folder with NetBean
-3. Run the server with the run project button
+[comment]: <> (## Start server)
 
-By default, type the following URL with the combination of parameters listed [here](#ListOfAPIEndpoints)
+[comment]: <> (The current distribution uses Java DB in NetBeans and is hosted with GlassFish 4.1. A set of sample data has been included in the schema file. For quick demonstration:)
 
-```
-http://localhost:15321/MyMovieMemoir-Backend/webresources/
+[comment]: <> (1. Download the project)
+
+[comment]: <> (2. Open the project folder with NetBean)
+
+[comment]: <> (3. Run the server with the run project button)
+
+[comment]: <> (By default, type the following URL with the combination of parameters listed [here]&#40;#ListOfAPIEndpoints&#41;)
+
+[comment]: <> (```)
+
+[comment]: <> (http://localhost:15321/MyMovieMemoir-Backend/webresources/)
 ```
