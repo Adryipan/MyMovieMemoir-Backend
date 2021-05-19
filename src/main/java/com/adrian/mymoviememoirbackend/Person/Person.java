@@ -1,4 +1,4 @@
-package com.adrian.mymoviememoirbackend.user;
+package com.adrian.mymoviememoirbackend.Person;
 
 import com.adrian.mymoviememoirbackend.credential.Credential;
 import com.adrian.mymoviememoirbackend.memoir.Memoir;
@@ -7,21 +7,21 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Entity(name = "User")
+@Entity(name = "Person")
 @Table(
-        name="User"
+        name="Person"
 )
-public class User {
+public class Person {
 
     @Id
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name = "person_sequence",
+            sequenceName = "person_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "person_sequence"
     )
     @Column(
             name = "user_id",
@@ -65,18 +65,18 @@ public class User {
     )
     private int postcode;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Credential credential;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private Set<Memoir> memoirs;
 
 
-    public User() {
+    public Person() {
     }
 
-    public User(long user_id, String firstName, String surname, String gender, LocalDate dob, String streetAddress, String stateCode, int postcode) {
+    public Person(long user_id, String firstName, String surname, String gender, LocalDate dob, String streetAddress, String stateCode, int postcode) {
         this.user_id = user_id;
         this.firstName = firstName;
         this.surname = surname;
@@ -87,7 +87,7 @@ public class User {
         this.postcode = postcode;
     }
 
-    public User(String firstName, String surname, String gender, LocalDate dob, String streetAddress, String stateCode, int postcode) {
+    public Person(String firstName, String surname, String gender, LocalDate dob, String streetAddress, String stateCode, int postcode) {
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
