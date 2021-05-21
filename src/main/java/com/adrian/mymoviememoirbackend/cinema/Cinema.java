@@ -28,4 +28,51 @@ public class Cinema {
     private String name;
 
     private int postcode;
+
+    public Cinema() {
+    }
+
+    public Cinema(long id, String name, int postcode) {
+        this.id = id;
+        this.name = name;
+        this.postcode = postcode;
+    }
+
+    public Cinema(String name, int postcode) {
+        this.name = name;
+        this.postcode = postcode;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(int postcode) {
+        this.postcode = postcode;
+    }
+
+    @Override
+    public String toString() {
+        return "Cinema{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", postcode=" + postcode +
+                '}';
+    }
 }

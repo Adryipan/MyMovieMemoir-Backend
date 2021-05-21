@@ -14,8 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
@@ -315,25 +319,23 @@ class PersonServiceTest {
 
     @Test
     void findByFullNamePostcode() {
-        List<Person> data = new ArrayList<>();
-        data.add(new Person(
+        Person data = new Person(
                 "John",
                 "Smith",
                 "M",
                 LocalDate.of(1995, Month.MARCH, 29),
                 "16 Coane Street",
                 "VIC",
-                3166));
+                3166);
 
         given(repository.findByFullNamePostcode("john", "smith", 3166)).willReturn(Optional.of(data));
 
-        final List<Person> expected = service.findByFullNamePostcode("john", "smith", 3166);
+        final Person expected = service.findByFullNamePostcode("john", "smith", 3166);
         assertThat(expected).isNotNull();
-        for(Person thisPerson : expected) {
-            assertThat(thisPerson.getFirstName()).isEqualTo("John");
-            assertThat(thisPerson.getSurname()).isEqualTo("Smith");
-            assertThat(thisPerson.getPostcode()).isEqualTo(3166);
-        }
+        assertThat(expected.getFirstName()).isEqualTo("John");
+        assertThat(expected.getSurname()).isEqualTo("Smith");
+        assertThat(expected.getPostcode()).isEqualTo(3166);
+
     }
 
     @Test
@@ -355,5 +357,35 @@ class PersonServiceTest {
         for(Person thisPerson : expected) {
             assertThat(thisPerson.getPostcode()).isEqualTo(3166);
         }
+    }
+
+    @Test
+    void shouldSavePersonSuccessfully(){
+        final Person person = new Person(
+                "John",
+                "Watson",
+                "M",
+                LocalDate.of(1995, Month.MARCH, 29),
+                "16 Coane Street",
+                "VIC",
+                3166);
+
+        given(repository.save(person)).willAnswer(invocation -> invocation.getArgument(0));
+
+        Person persistedPerson = service.save(person);
+
+        assertThat(persistedPerson).isNotNull();
+        verify(repository).save(any(Person.class));
+    }
+
+    @Test
+    void shouldThrowException(){
+        Exception exception = assertThrows(IllegalStateException.class, ()->{
+            service.findById(5L);
+        });
+
+        String expectedMessage = "User with id 5 does not exist.";
+        assertTrue(exception.getMessage().contains(expectedMessage));
+
     }
 }

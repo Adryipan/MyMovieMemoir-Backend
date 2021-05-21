@@ -139,13 +139,19 @@ class PersonRepositoryTest {
 
     @Test
     void findByFullNamePostcode() {
-        Optional<List<Person>> result = this.repository.findByFullNamePostcode("john", "smith", 3166);
+        Optional<Person> result = this.repository.findByFullNamePostcode("john", "smith", 3166);
         assertThat(result.isPresent()).isTrue();
 
-        List<Person> person = result.get();
-        assertTrue(person.size() == 1);
-        assertThat(person.get(0).getFirstName()).isEqualTo("John");
-        assertThat(person.get(0).getSurname()).isEqualTo("Smith");
-        assertThat(person.get(0).getPostcode()).isEqualTo(3166);
+        Person person = result.get();
+        assertThat(person.getFirstName()).isEqualTo("John");
+        assertThat(person.getSurname()).isEqualTo("Smith");
+        assertThat(person.getPostcode()).isEqualTo(3166);
     }
+
+    @Test
+    void shouldReturnEmpty(){
+        Optional<Person> result = this.repository.findById(5L);
+        assertTrue(result.isEmpty());
+    }
+
 }

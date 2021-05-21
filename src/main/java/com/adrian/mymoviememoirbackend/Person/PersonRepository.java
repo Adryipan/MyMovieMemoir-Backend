@@ -33,7 +33,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<List<Person>> findByPostcode(int postcode);
 
     @Query("SELECT p FROM Person p WHERE UPPER(f_name) = UPPER(:firstName) AND UPPER(surname) = UPPER(:surname) AND postcode = :postcode ")
-    Optional<List<Person>> findByFullNamePostcode(String firstName, String surname, int postcode);
+    Optional<Person> findByFullNamePostcode(String firstName, String surname, int postcode);
 
 
 }

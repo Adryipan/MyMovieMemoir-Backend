@@ -81,9 +81,9 @@ public class PersonService {
         return users.get();
     }
 
-    public List<Person> findByFullNamePostcode(String firstName, String surname, int postcode) {
-        Optional<List<Person>> users = personRepository.findByFullNamePostcode(firstName, surname, postcode);
-        if(!users.isPresent() || users.get().size() == 0){
+    public Person findByFullNamePostcode(String firstName, String surname, int postcode) {
+        Optional<Person> users = personRepository.findByFullNamePostcode(firstName, surname, postcode);
+        if(!users.isPresent()){
             throw new IllegalStateException("User " + firstName + " " + surname + " living in area " + postcode + " does not exist.");
         }
         return users.get();
@@ -95,5 +95,9 @@ public class PersonService {
             throw new IllegalStateException("User with postcode " + postcode + " does not exist.");
         }
         return users.get();
+    }
+
+    public Person save(Person person) {
+        return personRepository.save(person);
     }
 }

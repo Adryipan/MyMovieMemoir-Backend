@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -17,8 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PersonController.class)
@@ -34,6 +39,7 @@ class PersonControllerTest {
     private PersonRepository repository;
 
     private final String BASE_URL = "/api/v1/person";
+
 
     @BeforeEach
     void setUp() {
@@ -424,29 +430,78 @@ class PersonControllerTest {
 
     @Test
     void findByFullNamePostcode() throws Exception {
-        List<Person> data = new ArrayList<>();
-        data.add(new Person(
+        Person data = new Person(
                 "John",
                 "Smith",
                 "M",
                 LocalDate.of(1995, Month.MARCH, 29),
                 "16 Coane Street",
                 "VIC",
-                3166));
+                3166);
 
         when(service.findByFullNamePostcode("john", "smith", 3166)).thenReturn(data);
         final String requestUrl = BASE_URL + "/findByFullNamePostcode/john/smith/3166";
         MvcResult result = this.mockMvc.perform(get(requestUrl))
                 .andExpect(status().isOk())
                 .andReturn();
-        String resultJson = result.getResponse().getContentAsString();
+        JSONObject resultJson = new JSONObject(result.getResponse().getContentAsString());
 
-        JSONArray resultArray = new JSONArray(resultJson);
-        for(int i = 0; i < resultArray.length(); i++){
-            assertEquals(
-                    data.get(i).getClass().getDeclaredFields().length-2,
-                    resultArray.getJSONObject(i).length());
-            assertEquals(data.get(i).getUserId(), resultArray.getJSONObject(i).getLong("userId"));
-        }
+        assertEquals(
+                data.getClass().getDeclaredFields().length-2,
+                resultJson.length());
+        assertEquals(data.getUserId(), resultJson.getLong("userId"));
+
+    }
+
+    @Test
+    void register() throws Exception {
+        Person person = new Person(
+                "John",
+                "Watson",
+                "M",
+                LocalDate.of(1995, Month.MARCH, 29),
+                "16 Coane Street",
+                "VIC",
+                3166
+        );
+
+        given(service.findByFullNamePostcode("john", "watson", 3166)).willThrow(IllegalArgumentException.class);
+
+        when(service.save(any(Person.class))).thenReturn(person);
+
+        final String requestUrl = BASE_URL + "/register";
+        this.mockMvc.perform(
+                post(requestUrl)
+                .content("{\n" +
+                        "    \"firstName\": \"John\",\n" +
+                        "    \"surname\": \"Watson\",\n" +
+                        "    \"gender\": \"M\",\n" +
+                        "    \"dob\": \"1995-03-28\",\n" +
+                        "    \"streetAddress\": \"16 Coane Street\",\n" +
+                        "    \"stateCode\": \"VIC\",\n" +
+                        "    \"postcode\": 3166\n" +
+                        "}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+            ).andExpect(status().isCreated()).andDo(
+                    mvcResult -> {
+                        JSONObject resultJson = new JSONObject(mvcResult.getResponse().getContentAsString());
+                        assertEquals(
+                                person.getClass().getDeclaredFields().length-2,
+                                resultJson.length());
+                        assertEquals(person.getFirstName(), resultJson.getString("firstName"));
+                        assertEquals(person.getSurname(), resultJson.getString("surname"));
+                        assertEquals(person.getPostcode(), resultJson.getInt("postcode"));
+                    }
+        );
+    }
+
+    @Test
+    void shouldReturnEmpty() throws Exception {
+        final String requestUrl = BASE_URL + "/5";
+
+        this.mockMvc.perform(get(requestUrl))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 }

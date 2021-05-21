@@ -1,9 +1,13 @@
 package com.adrian.mymoviememoirbackend.Person;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+
 
 @RestController
 @RequestMapping(path = "api/v1/person")
@@ -61,13 +65,26 @@ public class PersonController {
         return personService.findByPostcode(postcode);
     }
 
-    @GetMapping("findByFullNamePostcode/{firstName}/{surname}/{postcode}")
-    public List<Person> findByFullNamePostcode(
+    @GetMapping(path = "findByFullNamePostcode/{firstName}/{surname}/{postcode}")
+    public Person findByFullNamePostcode(
             @PathVariable("firstName") String firstName,
             @PathVariable("surname") String surname,
             @PathVariable("postcode") int postcode) {
 
         return personService.findByFullNamePostcode(firstName, surname, postcode);
+    }
+
+    @PostMapping(
+            path = "/register",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ResponseEntity<Person> register(@RequestBody Person person){
+        Person persistedPerson = personService.save(person);
+
+        return ResponseEntity.created(
+                URI.create(String.format("/register/%s" , person.getFirstName().toLowerCase())))
+                .body(persistedPerson);
     }
 
 
