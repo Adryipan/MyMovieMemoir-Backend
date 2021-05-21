@@ -27,7 +27,7 @@ public class Person {
             name = "user_id",
             updatable = false
     )
-    private long user_id;
+    private long userId;
 
     @Column(
             name = "f_name"
@@ -76,8 +76,8 @@ public class Person {
     public Person() {
     }
 
-    public Person(long user_id, String firstName, String surname, String gender, LocalDate dob, String streetAddress, String stateCode, int postcode) {
-        this.user_id = user_id;
+    public Person(long userId, String firstName, String surname, String gender, LocalDate dob, String streetAddress, String stateCode, int postcode) {
+        this.userId = userId;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
@@ -97,12 +97,12 @@ public class Person {
         this.postcode = postcode;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -164,7 +164,7 @@ public class Person {
     @Override
     public String toString() {
         return "User{" +
-                "user_id=" + user_id +
+                "user_id=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", surname='" + surname + '\'' +
                 ", gender='" + gender + '\'' +
