@@ -27,18 +27,18 @@ public class Cinema {
     )
     private String name;
 
-    private int postcode;
+    private String postcode;
 
     public Cinema() {
     }
 
-    public Cinema(long id, String name, int postcode) {
+    public Cinema(long id, String name, String postcode) {
         this.id = id;
         this.name = name;
         this.postcode = postcode;
     }
 
-    public Cinema(String name, int postcode) {
+    public Cinema(String name, String postcode) {
         this.name = name;
         this.postcode = postcode;
     }
@@ -59,11 +59,11 @@ public class Cinema {
         this.name = name;
     }
 
-    public int getPostcode() {
+    public String getPostcode() {
         return postcode;
     }
 
-    public void setPostcode(int postcode) {
+    public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
 

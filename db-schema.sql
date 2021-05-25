@@ -1,7 +1,7 @@
 create table cinema (
     cinema_id bigint not null, 
     cinema_name varchar(255), 
-    postcode integer not null, 
+    postcode char(4) not null,
     primary key (cinema_id)
 );
 

@@ -35,54 +35,7 @@ class PersonControllerTest {
     @MockBean
     private PersonService service;
 
-    @Mock
-    private PersonRepository repository;
-
     private final String BASE_URL = "/api/v1/person";
-
-
-    @BeforeEach
-    void setUp() {
-        List<Person> data = new ArrayList<>();
-        data.add(new Person(
-                "John",
-                "Smith",
-                "M",
-                LocalDate.of(1995, Month.MARCH, 29),
-                "16 Coane Street",
-                "VIC",
-                3166));
-
-        data.add(new Person(
-                "John",
-                "Hughes",
-                "M",
-                LocalDate.of(1995, Month.MARCH, 29),
-                "16 Coane Street",
-                "NSW",
-                2291));
-
-        data.add(new Person(
-                "Mary",
-                "Hughes",
-                "F",
-                LocalDate.of(1959, Month.SEPTEMBER, 29),
-                "42 Colleague Walk",
-                "VIC",
-                3800));
-
-        data.add(new Person(
-                "Karina",
-                "Perry",
-                "F",
-                LocalDate.of(1975, Month.APRIL, 2),
-                "151 City Road",
-                "VIC",
-                3006));
-
-        repository.saveAll(data);
-    }
-
 
     @Test
     void getAllPerson() throws Exception{

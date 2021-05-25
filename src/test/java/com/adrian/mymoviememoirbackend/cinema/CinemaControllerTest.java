@@ -2,9 +2,7 @@ package com.adrian.mymoviememoirbackend.cinema;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,13 +29,9 @@ class CinemaControllerTest {
 
     private final String BASE_URL = "/api/v1/cinema";
 
-//    @BeforeEach
-//    void setUp() {
-//    }
-
     @Test
     void findById() throws Exception {
-        Cinema data = new Cinema("Hoyts Chadstone", 3148);
+        Cinema data = new Cinema("Hoyts Chadstone", "3148");
 
         when(service.findById(0)).thenReturn(data);
 
@@ -55,7 +49,7 @@ class CinemaControllerTest {
         final String cinemaName = "Hoyts Chadstone";
         List<Cinema> data = new ArrayList<>();
         data.add(
-                new Cinema("Hoyts Chadstone", 3148)
+                new Cinema("Hoyts Chadstone", "3148")
         );
 
 
@@ -77,7 +71,7 @@ class CinemaControllerTest {
         final int postcode = 3148;
         List<Cinema> data = new ArrayList<>();
         data.add(
-                new Cinema("Hoyts Chadstone", 3148)
+                new Cinema("Hoyts Chadstone", "3148")
         );
 
         when(service.findByPostcode(postcode)).thenReturn(data);

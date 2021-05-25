@@ -26,11 +26,11 @@ class CinemaRepositoryTest {
     @BeforeEach
     void setUp() {
         this.manager.persist(
-                new Cinema("Hoyts Chadstone", 3148)
+                new Cinema("Hoyts Chadstone", "3148")
         );
 
         this.manager.persist(
-                new Cinema("Waverley village", 3149)
+                new Cinema("Waverley village", "3149")
         );
     }
 

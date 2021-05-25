@@ -34,9 +34,6 @@ public class PersonService {
         if(!users.isPresent() || users.get().size() == 0){
             throw new IllegalStateException("User with fist name " + fname + " does not exist.");
         }
-//        else if(users.get().size() == 0){
-//            throw new IllegalStateException("User with fist name " + fname + " does not exist.");
-//        }
         return users.get();
     }
 

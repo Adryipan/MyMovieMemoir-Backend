@@ -28,11 +28,11 @@ class CinemaServiceTest {
     void setUp(){
         List<Cinema> data = new ArrayList<>();
         data.add(
-                new Cinema("Hoyts Chadstone", 3148)
+                new Cinema("Hoyts Chadstone", "3148")
         );
 
        data.add(
-                new Cinema("Waverley village", 3149)
+                new Cinema("Waverley village", "3149")
         );
 
        repository.saveAll(data);
@@ -41,7 +41,7 @@ class CinemaServiceTest {
     @Test
     void findById() {
         final Long id = 1L;
-        Cinema cinema = new Cinema("Hoyts Chadstone", 3148);
+        Cinema cinema = new Cinema("Hoyts Chadstone", "3148");
 
         given(repository.findById(1L)).willReturn(Optional.of(cinema));
 
@@ -54,7 +54,7 @@ class CinemaServiceTest {
         final String cinemaName = "Hoyts Chadstone";
         List<Cinema> data = new ArrayList<>();
         data.add(
-                new Cinema("Hoyts Chadstone", 3148)
+                new Cinema("Hoyts Chadstone", "3148")
         );
 
         given(repository.findByCinemaName(cinemaName)).willReturn(Optional.of(data));
@@ -71,7 +71,7 @@ class CinemaServiceTest {
         final int postcode = 3148;
         List<Cinema> data = new ArrayList<>();
         data.add(
-                new Cinema("Hoyts Chadstone", 3148)
+                new Cinema("Hoyts Chadstone", "3148")
         );
 
         given(repository.findByPostcode(postcode)).willReturn(Optional.of(data));
