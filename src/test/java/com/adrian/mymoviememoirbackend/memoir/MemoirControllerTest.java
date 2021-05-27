@@ -130,5 +130,5 @@ class MemoirControllerTest {
         JsonObject content = new Gson().fromJson(result.getResponse().getContentAsString(), JsonObject.class);
         assertEquals("\"Incorrect start date format; Please follow format yyyy-mm-dd in numbers.\"", content.get("Message").toString());
     }
-    
+
 }

@@ -52,7 +52,7 @@ public class MemoirService {
         return result.get();
     }
 
-    public List<Memoir> findByWatchTime(String watchTime) {
+    public List<Memoir> findByWatchDateTime(String watchTime) {
         String[] watchTimeString = watchTime.split("-");
         Optional<List<Memoir>> result = repository.findByWatchTime(LocalDateTime.of(Integer.parseInt(watchTimeString[0]), Integer.parseInt(watchTimeString[1]), Integer.parseInt(watchTimeString[2]), Integer.parseInt(watchTimeString[3]), Integer.parseInt(watchTimeString[4])));
         if(result.isEmpty()){

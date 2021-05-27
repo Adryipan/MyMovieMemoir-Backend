@@ -49,9 +49,9 @@ public class MemoirController {
     }
 
     //Get by Watch time
-    @GetMapping(path = "findByWatchTime/{watchTime}")
-    public List<Memoir> findByWatchTime(@PathVariable("watchTime") String watchTime){
-        return service.findByWatchTime(watchTime);
+    @GetMapping(path = "findByWatchDate/{watchDate}")
+    public List<Memoir> findByWatchDate(@PathVariable("watchTime") String watchDate){
+        return service.findByWatchDateTime(watchDate);
     }
 
     //Get by rating
@@ -119,9 +119,6 @@ public class MemoirController {
             response = "{\"Message\": \"Incorrect " + message + "Please follow format yyyy-mm-dd in numbers.\"}";
             return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
-
-
-
     }
 
     //id+year to find number of entry per month
@@ -149,7 +146,7 @@ public class MemoirController {
 
     //id to find top five of movies released in the current year
     @GetMapping(path = "topFiveMovieOfTheYear/{userId}")
-    public ResponseEntity<String> topFiveMovieOfTheYear(@PathVariable("userId") Integer userId){
+    public ResponseEntity<String> topFiveMovieOfTheYear(@PathVariable("userId") long userId){
         List<MovieAndRating> result = service.topFiveMovieOfTheYear(userId);
 
         Gson gson = new Gson();
