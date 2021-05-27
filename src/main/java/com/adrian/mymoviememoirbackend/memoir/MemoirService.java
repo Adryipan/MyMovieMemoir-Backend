@@ -1,16 +1,16 @@
 package com.adrian.mymoviememoirbackend.memoir;
 
+import com.adrian.mymoviememoirbackend.statics.EntryPerMonth;
 import com.adrian.mymoviememoirbackend.statics.MemoirPostcodeCount;
+import com.adrian.mymoviememoirbackend.statics.MovieAndRating;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MemoirService {
@@ -106,8 +106,35 @@ public class MemoirService {
             throw new IllegalStateException("Memoir of user " + userId + " watched between " + startDate + " and " + endDate + " does not exist.");
         }
 
-
         return result.get();
 
+    }
+
+    public List<MovieAndRating> findTopRatingbyUserid(long userId, int limit) {
+        Optional<List<MovieAndRating>> result = repository.findTopRatingbyUserid(userId, PageRequest.of(0, limit));
+        if(result.isEmpty()){
+            throw new IllegalStateException("Memoir of user " + userId + " does not exist.");
+        }
+
+        return result.get();
+    }
+
+    public List<MovieAndRating> topFiveMovieOfTheYear(long userId) {
+        int currentYear = LocalDate.now().getYear();
+        Optional<List<MovieAndRating>> result = repository.topFiveMovieOfTheYear(userId, currentYear, PageRequest.of(0, 5));
+        if(result.isEmpty()){
+            throw new IllegalStateException("Memoir of user " + userId + " does not exist.");
+        }
+
+        return result.get();
+    }
+
+    public List<EntryPerMonth> countMoviePerMonth(long userId, int year) {
+        Optional<List<EntryPerMonth>> result = repository.countMoviePerMonth(userId, year);
+        if(result.isEmpty()){
+            throw new IllegalStateException("Memoir of user " + userId + " in year " + year + " does not exist.");
+        }
+
+        return result.get();
     }
 }

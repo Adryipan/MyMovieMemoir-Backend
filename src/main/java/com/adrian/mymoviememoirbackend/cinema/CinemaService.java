@@ -32,7 +32,7 @@ public class CinemaService {
         return result.get();
     }
 
-    public List<Cinema> findByPostcode(int postcode) {
+    public List<Cinema> findByPostcode(String postcode) {
         Optional<List<Cinema>> result = repository.findByPostcode(postcode);
         if(result.isEmpty()){
             throw new IllegalStateException("Cinema with postcode " + postcode + " does not exist.");

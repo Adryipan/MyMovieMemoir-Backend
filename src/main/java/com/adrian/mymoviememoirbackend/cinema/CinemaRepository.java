@@ -14,5 +14,5 @@ public interface CinemaRepository extends JpaRepository<Cinema, Long> {
     Optional<List<Cinema>> findByCinemaName(String name);
 
     @Query("SELECT c FROM Cinema c WHERE UPPER(c.postcode) = UPPER(:postcode)")
-    Optional<List<Cinema>> findByPostcode(int postcode);
+    Optional<List<Cinema>> findByPostcode(String postcode);
 }

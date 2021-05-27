@@ -25,4 +25,12 @@ public class MemoirPostcodeCount {
     public void setTotal(long total) {
         this.total = total;
     }
+
+    @Override
+    public String toString() {
+        return "MemoirPostcodeCount{" +
+                "postcode='" + postcode + '\'' +
+                ", total=" + total +
+                '}';
+    }
 }

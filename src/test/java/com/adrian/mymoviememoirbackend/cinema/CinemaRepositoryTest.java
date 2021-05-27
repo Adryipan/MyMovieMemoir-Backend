@@ -45,12 +45,12 @@ class CinemaRepositoryTest {
 
     @Test
     void findBySuburb() {
-        Optional<List<Cinema>> result = this.repository.findByPostcode(3148);
+        Optional<List<Cinema>> result = this.repository.findByPostcode("3148");
         assertTrue(result.isPresent());
 
         for(Cinema thisCinema : result.get()){
             assertEquals("Hoyts Chadstone", thisCinema.getName());
-            assertEquals(3148, thisCinema.getPostcode());
+            assertEquals("3148", thisCinema.getPostcode());
         }
     }
 
@@ -62,7 +62,7 @@ class CinemaRepositoryTest {
         Optional<List<Cinema>> resultList = this.repository.findByCinemaName("Chadstone");
         assertTrue(resultList.get().isEmpty());
 
-        resultList = this.repository.findByPostcode(3000);
+        resultList = this.repository.findByPostcode("3000");
         assertTrue(resultList.get().isEmpty());
     }
 }

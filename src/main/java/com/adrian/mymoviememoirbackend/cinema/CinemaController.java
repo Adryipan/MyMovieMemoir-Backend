@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping(path = "api/v1/cinema")
@@ -30,7 +31,13 @@ public class CinemaController {
     }
 
     @GetMapping(path = "findByPostcode/{postcode}")
-    public List<Cinema> findByPostcode(@PathVariable("postcode") int postcode){
-        return service.findByPostcode(postcode);
+    public List<Cinema> findByPostcode(@PathVariable("postcode") String postcode){
+        String regex = "^\\d{4}";
+        Pattern postCodePattern = Pattern.compile(regex);
+        if(postCodePattern.matcher(postcode).matches()) {
+            return service.findByPostcode(postcode);
+        }else{
+            throw new IllegalArgumentException("Invalid postcode");
+        }
     }
 }

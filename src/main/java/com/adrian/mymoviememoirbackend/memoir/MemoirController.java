@@ -1,9 +1,9 @@
 package com.adrian.mymoviememoirbackend.memoir;
 
+import com.adrian.mymoviememoirbackend.statics.EntryPerMonth;
 import com.adrian.mymoviememoirbackend.statics.MemoirPostcodeCount;
+import com.adrian.mymoviememoirbackend.statics.MovieAndRating;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @RestController
@@ -72,214 +70,91 @@ public class MemoirController {
     @GetMapping(path = "findByMovieNameAndCinema/{movieName}/{cinemaName}")
     public List<Memoir> findByMovieNameAndCinema(@PathVariable("movieName") String movieName,
                                                  @PathVariable("cinemaName") String cinemaName){
-        return service.findByMovieNameAndCinema(movieName, cinemaName);
+        return service.findByMovieNameAndCinema(movieName.replace("-", " "), cinemaName.replace("-", " "));
     }
 
     //Get by movie name and cinema postcode
     @GetMapping(path = "findByMovieNameAndCinemaPostcode/{movieName}/{postcode}")
-    public List<Memoir> findByMovieNameAndCinemaPostcode(@PathVariable("movieName") String movieName,
+    public ResponseEntity<String> findByMovieNameAndCinemaPostcode(@PathVariable("movieName") String movieName,
                                                        @PathVariable("postcode") String postcode){
         String regex = "^\\d{4}";
         Pattern postCodePattern = Pattern.compile(regex);
+        String response = "";
         if(postCodePattern.matcher(postcode).matches()){
-            return service.findByMovieNameAndCinemaPostcode(movieName, postcode);
+            List<Memoir> result = service.findByMovieNameAndCinemaPostcode(movieName.replace("-", " "), postcode);
+            Gson gson = new Gson();
+            response = gson.toJson(result);
+            return new ResponseEntity(response, HttpStatus.OK);
         }else{
-           throw new IllegalArgumentException("Invalid postcode");
+            response = "{\"Message\": \"Invalid Postcode\"}";
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
 
     }
 
     //id+start+enddate to find number of entry per postcode
-    @GetMapping(path = "findByIdDate/{userId}/{startDate}/{endDate}")
-    public ResponseEntity<String> countByIdDatePerPostcode(@PathVariable("userId") Integer userId,
+    @GetMapping(path = "countByIdDatePerPostcode/{userId}/{startDate}/{endDate}")
+    public ResponseEntity<String> countByIdDatePerPostcode(@PathVariable("userId") long userId,
                                        @PathVariable("startDate") String startDate,
                                        @PathVariable("endDate") String endDate){
+        // Check date format
+        String regex = "\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])*";
+        Pattern datePattern = Pattern.compile(regex);
+        String response = "";
+        boolean correctStartDate = datePattern.matcher(startDate).matches();
+        boolean correctEndDate = datePattern.matcher(endDate).matches();
+        if( correctStartDate && correctEndDate) {
+            List<MemoirPostcodeCount> result = service.countByIdDatePerPostcode(userId, startDate, endDate);
+            Gson gson = new Gson();
+            response = gson.toJson(result);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }else{
+            String message = "";
+            if(!correctStartDate){
+                message += "start date format; ";
+            }
+            if(!correctEndDate){
+                message += "end date format; ";
+            }
+            response = "{\"Message\": \"Incorrect " + message + "Please follow format yyyy-mm-dd in numbers.\"}";
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        }
 
-        List<MemoirPostcodeCount> result = service.countByIdDatePerPostcode(userId, startDate, endDate);
+
+
+    }
+
+    //id+year to find number of entry per month
+    @GetMapping(path = "countMoviePerMonth/{userId}/{year}")
+    public ResponseEntity<String> countMoviePerMonth(@PathVariable("userId") long userId, @PathVariable("year") int year){
+        List<EntryPerMonth> result = service.countMoviePerMonth(userId, year);
+
+
         Gson gson = new Gson();
         String response = gson.toJson(result);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
-//
-//    //id+year to find number of entery per month
-//    @GetMapping(path = "countMoviePerMonth/{userId}/{year}")
-//    @Produces({"application/json"})
-//    public Object countMoviePerMonth(@PathVariable("userId") Integer userId, @PathVariable("year") String year){
-//        TypedQuery service = em.createQuery("SELECT m.watchDate FROM Memoir m WHERE m.userId.userId = :userId AND FUNC('YEAR', m.watchDate) = FUNC('YEAR', :year) ", Object[].class);
-//        service.setParameter("userId", userId);
-//        try {
-//            Date convertedYear = new SimpleDateFormat("yyyy").parse(year);
-//            service.setParameter("year", convertedYear);
-//        } catch (ParseException ex) {
-//            Logger.getLogger(MemoirFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        //Array of month name
-//        String[] monthName = new String[13];
-//        monthName[1] = "Jan";
-//        monthName[2] = "Feb";
-//        monthName[3] = "Mar";
-//        monthName[4] = "Apr";
-//        monthName[5] = "May";
-//        monthName[6] = "Jun";
-//        monthName[7] = "Jul";
-//        monthName[8] = "Aug";
-//        monthName[9] = "Sep";
-//        monthName[10] = "Oct";
-//        monthName[11] = "Nov";
-//        monthName[12] = "Dec";
-//
-//        //Array for counting entries
-//        int[] counter = new int[13];
-//        Arrays.fill(counter, 0);
-//
-//        List<Object[]> resultList= service.getResultList();
-//        for(int i = 0; i < resultList.size(); i++){
-//            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-//            String thisDate = dateFormat.format(resultList.get(i));
-//            int thisMonth = Integer.parseInt(thisDate.split("-")[1]);
-//            counter[thisMonth] += 1;
-//        }
-//
-//        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-//        for (int i = 1; i < monthName.length; i++){
-//            JsonObject resultObject = Json.createObjectBuilder().add("Month", monthName[i]).add("Count", counter[i]).build();
-//            arrayBuilder.add(resultObject);
-//        }
-//        JsonArray resultArray = arrayBuilder.build();
-//        return resultArray;
-//    }
-//
-//    //id to find highest rating
-//    @GetMapping(path = "findHighestRatingbyUserid/{userId}")
-//    @Produces({"application/json"})
-//    public Object findHighestRatingbyUserid(@PathVariable("userId") Integer userId){
-//        TypedQuery service = em.createQuery("SELECT m.movieName, m.rating, m.releaseDate FROM Memoir m WHERE m.userId.userId = :userId", Object[].class);
-//        service.setParameter("userId", userId);
-//
-//        List<Object[]> resultList = service.getResultList();
-//
-//        short highest = 0;
-//        for (Object[] row: resultList){
-//            if((short)row[1] > highest){
-//                highest = (short)row[1];
-//            }
-//            if(highest == 5){
-//                break;
-//            }
-//        }
-//
-//        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-//        for(Object[] row: resultList){
-//            if((short)row[1] == highest){
-//                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-//                JsonObject resultObject = Json.createObjectBuilder().
-//                        add("Movie", (String)row[0]).
-//                        add("rating", (String)row[1]).
-//                        add("Release Date", dateFormat.format(row[2])).build();
-//                arrayBuilder.add(resultObject);
-//            }
-//        }
-//        JsonArray resultArray = arrayBuilder.build();
-//        return resultArray;
-//    }
-//
-//    //id to find movies watched in the same year as the release year
-//    @GetMapping(path =
-//    @Path("findWatchedSameAsReleaseYear/{userId}")
-//    @Produces({"application/json"})
-//    public Object findWatchedSameAsReleaseYear(@PathVariable("userId") Integer userId){
-//        TypedQuery service = em.createQuery("SELECT m.movieName, m.releaseDate from Memoir m WHERE m.userId.userId = :userId AND FUNC('YEAR', m.releaseDate) = FUNC('YEAR', m.watchDate)", Object[].class);
-//        service.setParameter("userId", userId);
-//        List<Object[]> resultList = service.getResultList();
-//        JsonArrayBuilder arrayBuilder =  Json.createArrayBuilder();
-//        for(Object[] row : resultList){
-//            DateFormat dateFormat = new SimpleDateFormat("yyyy");
-//            JsonObject resultObject = Json.createObjectBuilder().
-//                    add("Movie name", (String)row[0]).
-//                    add("Release Date", dateFormat.format(row[1])).build();
-//            arrayBuilder.add(resultObject);
-//        }
-//        JsonArray resultArray = arrayBuilder.build();
-//        return resultArray;
-//
-//    }
-//
-//    //id to find remake movie
-//    @GetMapping(path = "findRemakebyUserID/{userId}")
-//    @Produces({"application/json"})
-//    public Object findRemakebyUserID(@PathVariable("userId") Integer userId){
-//        //first filter out the repeated name with different release date
-//        TypedQuery filter = em.createQuery("SELECT m.movieName, COUNT(DISTINCT m.releaseDate) FROM Memoir m WHERE m.userId.userId = :userId GROUP BY m.movieName HAVING COUNT(DISTINCT m.releaseDate) > 1", Object[].class);
-//        filter.setParameter("userId", userId);
-//        List<Object[]> filteredList = filter.getResultList();
-//
-//        //Select movie name and release date from the filtered list
-//        TypedQuery service = em.createQuery("SELECT m.movieName, m.releaseDate FROM Memoir m WHERE m.movieName = :movieName", Object[].class);
-//        //A container to hold the wanted result
-//        List<Object[]> resultList = new ArrayList<Object[]>();
-//        //Run service to select row
-//        for(Object[] row : filteredList){
-//            service.setParameter("movieName", (String)row[0]);
-//            resultList.addAll(service.getResultList());
-//        }
-//
-//        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-//        for(Object[] row : resultList){
-//            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-//            JsonObject resultObject = Json.createObjectBuilder().
-//                    add("Movie Name", (String)row[0]).
-//                    add("Release Date", df.format(row[1])).build();
-//            arrayBuilder.add(resultObject);
-//        }
-//
-//        JsonArray resultArray = arrayBuilder.build();
-//
-//        return resultArray;
-//    }
-//
-//    //id to find top five of movies released in the current year
-//    @GetMapping(path = "topFiveMovieOfTheYear/{userId}")
-//    @Produces({"application/json"})
-//    public Object topFiveMovieOfTheYear(@PathVariable("userId") Integer userId){
-//        TypedQuery service = em.createQuery("SELECT m.movieName, m.releaseDate, m.rating FROM Memoir m WHERE m.userId.userId = :userId AND FUNC('YEAR', m.releaseDate) = FUNC('YEAR', :year) ORDER BY m.rating DESC", Object[].class);
-//        service.setParameter("userId", userId);
-//        //Current year of the system
-//        Calendar now = Calendar.getInstance();
-//        int container = now.get(Calendar.YEAR);
-//        String year = String.valueOf(container);
-//        try {
-//            Date convertedYear = new SimpleDateFormat("yyyy").parse(year);
-//            service.setParameter("year", convertedYear);
-//        } catch (ParseException ex) {
-//            Logger.getLogger(MemoirFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        List<Object[]> resultList= service.getResultList();
-//        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-//        if(resultList.size() <= 5){
-//            for(Object[] row : resultList){
-//                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-//                JsonObject resultObject = Json.createObjectBuilder().
-//                        add("Movie Name", (String)row[0]).
-//                        add("Release Date", dateFormat.format(row[1])).
-//                        add("Rating", (String)row[2]).build();
-//                arrayBuilder.add(resultObject);
-//            }
-//        }else{
-//            for(int i = 0; i < 5; i++){
-//                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-//                Object[] row = resultList.get(i);
-//                JsonObject resultObject = Json.createObjectBuilder().
-//                        add("Movie Name", (String)row[0]).
-//                        add("Release Date", dateFormat.format(row[1])).
-//                        add("Rating", (String)row[2]).build();
-//                arrayBuilder.add(resultObject);
-//            }
-//        }
-//
-//        JsonArray resultArray = arrayBuilder.build();
-//        return resultArray;
-//    }
+
+    //id to find highest rating
+    @GetMapping(path = "findHighestRatingbyUserid/{userId}")
+    public ResponseEntity<String> findHighestRatingbyUserid(@PathVariable("userId") long userId){
+        List<MovieAndRating> result = service.findTopRatingbyUserid(userId, 1);
+
+        Gson gson = new Gson();
+        String response = gson.toJson(result);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    //id to find top five of movies released in the current year
+    @GetMapping(path = "topFiveMovieOfTheYear/{userId}")
+    public ResponseEntity<String> topFiveMovieOfTheYear(@PathVariable("userId") Integer userId){
+        List<MovieAndRating> result = service.topFiveMovieOfTheYear(userId);
+
+        Gson gson = new Gson();
+        String response = gson.toJson(result);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
 }

@@ -1,6 +1,10 @@
 package com.adrian.mymoviememoirbackend.memoir;
 
+import com.adrian.mymoviememoirbackend.statics.EntryPerMonth;
 import com.adrian.mymoviememoirbackend.statics.MemoirPostcodeCount;
+import com.adrian.mymoviememoirbackend.statics.MovieAndRating;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MemoirRepository extends JpaRepository<Memoir, Long> {
+public interface MemoirRepository extends JpaRepository<Memoir, Long>{
 
     @Query("SELECT m FROM Memoir m WHERE UPPER(m.movieName) = UPPER(:name)")
     Optional<List<Memoir>> findByMovieName(String name);
@@ -40,4 +44,24 @@ public interface MemoirRepository extends JpaRepository<Memoir, Long> {
             "AND m.watchDateTime BETWEEN :startDateTime AND :endDateTime " +
             "GROUP BY m.cinema.postcode")
     Optional<List<MemoirPostcodeCount>> countByIdDatePerPostcode(long userId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query("SELECT new com.adrian.mymoviememoirbackend.statics.MovieAndRating(m.movieName, m.rating, m.releaseDate) " +
+            "FROM Memoir m " +
+            "WHERE m.person.id = :userId " +
+            "ORDER BY m.rating DESC ")
+    Optional<List<MovieAndRating>> findTopRatingbyUserid(long userId, Pageable pageable);
+
+    @Query("SELECT new com.adrian.mymoviememoirbackend.statics.MovieAndRating(m.movieName, m.rating, m.releaseDate) " +
+            "FROM Memoir m " +
+            "WHERE m.person.id = :userId " +
+            "AND year(m.watchDateTime) = :currentYear " +
+            "ORDER BY m.rating DESC ")
+    Optional<List<MovieAndRating>> topFiveMovieOfTheYear(long userId, int currentYear, Pageable pageable);
+
+    @Query("SELECT new com.adrian.mymoviememoirbackend.statics.EntryPerMonth(month(m.watchDateTime), count(month(m.watchDateTime))) " +
+            "FROM Memoir m " +
+            "WHERE m.person.id = :userId " +
+            "AND year(m.watchDateTime) = :currentYear " +
+            "GROUP BY month(m.watchDateTime) ")
+    Optional<List<EntryPerMonth>> countMoviePerMonth(long userId, int currentYear);
 }

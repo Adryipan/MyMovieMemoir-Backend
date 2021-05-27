@@ -68,7 +68,7 @@ class CinemaControllerTest {
 
     @Test
     void findByPostcode() throws Exception {
-        final int postcode = 3148;
+        final String postcode = "3148";
         List<Cinema> data = new ArrayList<>();
         data.add(
                 new Cinema("Hoyts Chadstone", "3148")

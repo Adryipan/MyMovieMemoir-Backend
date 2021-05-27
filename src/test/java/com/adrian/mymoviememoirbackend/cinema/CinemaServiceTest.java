@@ -24,20 +24,6 @@ class CinemaServiceTest {
     @InjectMocks
     private CinemaService service;
 
-    @BeforeEach
-    void setUp(){
-        List<Cinema> data = new ArrayList<>();
-        data.add(
-                new Cinema("Hoyts Chadstone", "3148")
-        );
-
-       data.add(
-                new Cinema("Waverley village", "3149")
-        );
-
-       repository.saveAll(data);
-    }
-
     @Test
     void findById() {
         final Long id = 1L;
@@ -68,7 +54,7 @@ class CinemaServiceTest {
 
     @Test
     void findBySuburb() {
-        final int postcode = 3148;
+        final String postcode = "3148";
         List<Cinema> data = new ArrayList<>();
         data.add(
                 new Cinema("Hoyts Chadstone", "3148")
