@@ -83,7 +83,7 @@ class CinemaControllerTest {
 
         JSONArray resultArray = new JSONArray(result.getResponse().getContentAsString());
         for(int i = 0; i < resultArray.length(); i++) {
-            assertEquals(postcode, resultArray.getJSONObject(i).getInt("postcode"));
+            assertEquals(postcode, resultArray.getJSONObject(i).getString("postcode"));
         }
     }
 }
